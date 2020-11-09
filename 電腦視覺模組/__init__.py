@@ -1,3 +1,3 @@
-from opencv4t import *
+from cv4t import *
 
 

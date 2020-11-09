@@ -1,40 +1,117 @@
 import cv2
-
-
+from mss import mss
+import numpy as np
 
 __all__ = [ 
-            '讀取灰階影像', '讀取彩色影像', '顯示影像', '等待按鍵',
-            '關閉所有影像',
-
-
+            '讀取圖片灰階', '讀取圖片彩色', '顯示圖片', '等待按鍵',
+            '關閉所有圖片', '儲存圖片', '開啟影像擷取', '擷取單張影像',
+            '彩色轉灰階', '灰階轉彩色', '左右翻轉', '上下翻轉', '上下左右翻轉',
+            '擷取螢幕灰階',
             ]
 
+
+
+
+
+### Custom Exceptions
 class ImageReadError(Exception):
     def __init__(self, value):
-        message = f"無法讀取影像檔 (檔名:{value})"
+        message = f"無法讀取圖片檔 (檔名:{value})"
         super().__init__(message)
 
+class ImageWriteError(Exception):
+    def __init__(self, value):
+        message = f"無法儲存圖片檔 (檔名:{value})"
+        super().__init__(message)
+
+class CameraOpenError(Exception):
+    def __init__(self, value=''):
+        message = f"攝影機開啟錯誤 {value}"
+        super().__init__(message)     
+
+class CameraReadError(Exception):
+    def __init__(self, value=''):
+        message = f"攝影機讀取錯誤 {value}"
+        super().__init__(message)    
 
 
+### wrapper functions
 
-def 讀取灰階影像(filename):
+def 讀取圖片灰階(filename):
     ret = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     if ret is None:
         raise ImageReadError(filename)
     else:
         return ret
 
-def 讀取彩色影像(filename):
+def 讀取圖片彩色(filename):
     ret = cv2.imread(filename, cv2.IMREAD_COLOR)
     if ret is None:
         raise ImageReadError(filename)
     else:
         return ret
 
-win_name_prefix = '影像'
+
+def 儲存圖片(filename, image):
+    ret = cv2.imwrite(filename, image)
+    if ret is False:
+        ImageWriteError(filename)
+
+def 彩色轉灰階(image):
+    if image.ndim == 2:
+        return image
+    elif image.ndim == 3:
+        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+def 灰階轉彩色(image):
+    if image.ndim == 3:
+        return image
+    elif image.ndim == 2:
+        return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+
+def 左右翻轉(image):
+    return cv2.flip(image, 1)
+
+def 上下翻轉(image):
+    return cv2.flip(image, 0)
+
+def 上下左右翻轉(image):
+    return cv2.flip(image, -1)
+
+
+def 開啟影像擷取(id=0):
+    cap = cv2.VideoCapture(id)
+    if not cap.isOpened():
+        CameraOpenError()
+    return cap
+
+def 擷取單張影像(cap):
+    ret, image = cap.read()
+    if ret is False:
+        CameraReadError()
+    return image
+
+# for screenshot
+sct = mss()
+
+def 擷取螢幕灰階(row1, row2, col1, col2):
+    global sct
+
+    monitor = {}
+    monitor['top']= row1
+    monitor['left']= col1
+    monitor['width']= col2 - col1
+    monitor['height']= row2 - row1
+    
+    img = np.array(sct.grab(monitor))
+    
+    return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+
+
+win_name_prefix = '圖片'
 win_name_counter = 0
 
-def 顯示影像(image, 新視窗=False):
+def 顯示圖片(image, 新視窗=False):
     global win_name_prefix, win_name_counter    
     if 新視窗:
         win_name_counter += 1
@@ -49,7 +126,7 @@ def 等待按鍵(延遲=0):
     else:
         return chr(ret)
 
-def 關閉所有影像():
+def 關閉所有圖片():
     cv2.destroyAllWindows()
 
 
