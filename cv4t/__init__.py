@@ -6,7 +6,7 @@ __all__ = [
             '讀取圖片灰階', '讀取圖片彩色', '顯示圖片', '等待按鍵',
             '關閉所有圖片', '儲存圖片', '開啟影像擷取', '擷取單張影像',
             '彩色轉灰階', '灰階轉彩色', '左右翻轉', '上下翻轉', '上下左右翻轉',
-            '擷取螢幕灰階',
+            '擷取螢幕灰階', '畫灰階矩形',
             ]
 
 
@@ -111,13 +111,18 @@ def 擷取螢幕灰階(row1, row2, col1, col2):
 win_name_prefix = '圖片'
 win_name_counter = 0
 
-def 顯示圖片(image, 新視窗=False):
+def 顯示圖片(image, 標題=None, 新視窗=False):
     global win_name_prefix, win_name_counter    
-    if 新視窗:
-        win_name_counter += 1
-    win_name = win_name_prefix + str(win_name_counter)
-    cv2.imshow(win_name,image)
-    cv2.waitKey(1)
+    
+    if 標題 is not None:
+        cv2.imshow(標題,image)
+        cv2.waitKey(1)
+    else:
+        if 新視窗:
+            win_name_counter += 1
+        win_name = win_name_prefix + str(win_name_counter)
+        cv2.imshow(win_name,image)
+        cv2.waitKey(1)
 
 def 等待按鍵(延遲=0):
     ret = cv2.waitKey(延遲)
@@ -130,6 +135,8 @@ def 關閉所有圖片():
     cv2.destroyAllWindows()
 
 
+def 畫灰階矩形(image, row1, row2, col1, col2, color=0):
+    return cv2.rectangle(image, (col1, row1), (col2,row2), color)
 
 
 if __name__ == '__main__' :
