@@ -15,7 +15,7 @@ setuptools.setup(
     #packages=setuptools.find_packages(),
     platforms=["Windows"],
     python_requires=">=3.5",
-    packages=['cv4t','電腦視覺模組'],
+    packages=['cv4t','視覺模組'],
     install_requires = ['opencv-python>=4.4.0.44', 'Pillow>=7.2.0', 
                     'numpy>=1.19.2', 'mss>=6.0.0'],
         classifiers=[
