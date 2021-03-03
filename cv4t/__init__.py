@@ -79,8 +79,17 @@ def 上下左右翻轉(image):
     return cv2.flip(image, -1)
 
 
-def 開啟影像擷取(id=0):
+def 開啟影像擷取(id=0, 解析度=None):
+
     cap = cv2.VideoCapture(id)
+
+    if 解析度 == '720p':
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    elif 解析度 == '1080p':
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+
     if not cap.isOpened():
         CameraOpenError()
     return cap
