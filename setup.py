@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name="cv4t",
-    version="0.0.1",
+    version="0.0.2",
     author="Wen-Hung, Chang 張文宏",
     author_email="beardad1975@nmes.tyc.edu.tw",
     description="Computer Vision wrapper for Teenagers",
