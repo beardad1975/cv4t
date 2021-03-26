@@ -79,9 +79,13 @@ def 上下左右翻轉(image):
     return cv2.flip(image, -1)
 
 
-def 開啟影像擷取(id=0, 解析度=None):
+def 開啟影像擷取(id=0, 解析度=None, 後端=None):
 
-    cap = cv2.VideoCapture(id)
+    if 後端 == 'DSHOW':
+        cap = cv2.VideoCapture(id, cv2.CAP_DSHOW)
+    else:
+        # backend auto
+        cap = cv2.VideoCapture(id)
 
     if 解析度 == '720p':
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
@@ -117,7 +121,7 @@ def 擷取螢幕灰階(row1, row2, col1, col2):
     return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
 
 
-win_name_prefix = '圖片'
+win_name_prefix = 'image'
 win_name_counter = 0
 
 def 顯示圖片(image, 標題=None, 新視窗=False):
