@@ -1,12 +1,14 @@
 import cv2
 from mss import mss
 import numpy as np
+from . import color
 
 __all__ = [ 
-            '讀取圖片灰階', '讀取圖片彩色', '顯示圖片', '等待按鍵',
-            '關閉所有圖片', '儲存圖片', '開啟影像擷取', '擷取單張影像',
+            '讀取影像灰階', '讀取影像彩色', '顯示影像', '等待按鍵',
+            '關閉所有影像', '儲存影像', '設置影像擷取', '擷取影像',
             '彩色轉灰階', '灰階轉彩色', '左右翻轉', '上下翻轉', '上下左右翻轉',
-            '擷取螢幕灰階', '畫灰階矩形',
+            '擷取螢幕灰階', '擷取螢幕', '畫方形', '畫實心方形', 'color',
+            '畫圓形', '畫實心圓形',
             ]
 
 
@@ -16,35 +18,35 @@ __all__ = [
 ### Custom Exceptions
 class ImageReadError(Exception):
     def __init__(self, value):
-        message = f"無法讀取圖片檔 (檔名:{value})"
+        message = f"<< 無法讀取影像檔 (檔名:{value}) >>"
         super().__init__(message)
 
 class ImageWriteError(Exception):
     def __init__(self, value):
-        message = f"無法儲存圖片檔 (檔名:{value})"
+        message = f"<< 無法儲存影像檔 (檔名:{value}) >>"
         super().__init__(message)
 
 class CameraOpenError(Exception):
     def __init__(self, value=''):
-        message = f"攝影機開啟錯誤 {value}"
+        message = f"<< 攝影機開啟錯誤 {value} >>"
         super().__init__(message)     
 
 class CameraReadError(Exception):
     def __init__(self, value=''):
-        message = f"攝影機讀取錯誤 {value}"
+        message = f"<< 攝影機讀取錯誤 {value} >>"
         super().__init__(message)    
 
 
 ### wrapper functions
 
-def 讀取圖片灰階(filename):
+def 讀取影像灰階(filename):
     ret = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     if ret is None:
         raise ImageReadError(filename)
     else:
         return ret
 
-def 讀取圖片彩色(filename):
+def 讀取影像彩色(filename):
     ret = cv2.imread(filename, cv2.IMREAD_COLOR)
     if ret is None:
         raise ImageReadError(filename)
@@ -52,7 +54,7 @@ def 讀取圖片彩色(filename):
         return ret
 
 
-def 儲存圖片(filename, image):
+def 儲存影像(filename, image):
     ret = cv2.imwrite(filename, image)
     if ret is False:
         ImageWriteError(filename)
@@ -79,7 +81,7 @@ def 上下左右翻轉(image):
     return cv2.flip(image, -1)
 
 
-def 開啟影像擷取(id=0, 解析度=None, 後端=None):
+def 設置影像擷取(id=0, 解析度=None, 後端=None):
 
     if 後端 == 'DSHOW':
         cap = cv2.VideoCapture(id, cv2.CAP_DSHOW)
@@ -98,7 +100,7 @@ def 開啟影像擷取(id=0, 解析度=None, 後端=None):
         CameraOpenError()
     return cap
 
-def 擷取單張影像(cap):
+def 擷取影像(cap):
     ret, image = cap.read()
     if ret is False:
         CameraReadError()
@@ -106,6 +108,20 @@ def 擷取單張影像(cap):
 
 # for screenshot
 sct = mss()
+
+def 擷取螢幕(row1, row2, col1, col2):
+    global sct
+
+    monitor = {}
+    monitor['top']= row1
+    monitor['left']= col1
+    monitor['width']= col2 - col1
+    monitor['height']= row2 - row1
+    
+    img = np.array(sct.grab(monitor))
+    
+    return img
+
 
 def 擷取螢幕灰階(row1, row2, col1, col2):
     global sct
@@ -121,20 +137,17 @@ def 擷取螢幕灰階(row1, row2, col1, col2):
     return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
 
 
-win_name_prefix = 'image'
-win_name_counter = 0
 
-def 顯示圖片(image, 標題=None, 新視窗=False):
-    global win_name_prefix, win_name_counter    
+
+
+def 顯示影像(image, 視窗名稱=None):
+    global win_name_counter    
     
-    if 標題 is not None:
-        cv2.imshow(標題,image)
+    if 視窗名稱 is not None:
+        cv2.imshow(視窗名稱,image)
         cv2.waitKey(1)
-    else:
-        if 新視窗:
-            win_name_counter += 1
-        win_name = win_name_prefix + str(win_name_counter)
-        cv2.imshow(win_name,image)
+    else:        
+        cv2.imshow('1',image)
         cv2.waitKey(1)
 
 def 等待按鍵(延遲=0):
@@ -144,13 +157,27 @@ def 等待按鍵(延遲=0):
     else:
         return chr(ret)
 
-def 關閉所有圖片():
+def 關閉所有影像():
     cv2.destroyAllWindows()
 
 
-def 畫灰階矩形(image, row1, row2, col1, col2, color=0):
-    return cv2.rectangle(image, (col1, row1), (col2,row2), color)
+def 畫方形(image, x, y, 寬, 高, 顏色=(0,0,255), 線寬=2):
+    if 線寬 <= 0 : 線寬 = 2
+    if image.ndim == 2 : 顏色=255
+    return cv2.rectangle(image, (x, y), (x+寬,y+高), 顏色, 線寬)
 
+def 畫實心方形(image, x, y, 寬, 高, 顏色=(0,0,255), 線寬=-1):
+    if image.ndim == 2 : 顏色=255
+    return cv2.rectangle(image, (x, y), (x+寬,y+高), 顏色, 線寬)
+
+
+def 畫圓形(image, x, y, 半徑, 顏色=(0,0,255), 線寬=2 ):
+    if image.ndim == 2 : 顏色=255
+    return cv2.circle(image, (x,y),半徑, 顏色, 線寬 )
+
+def 畫實心圓形(image, x, y, 半徑, 顏色=(0,0,255), 線寬=-1 ):
+    if image.ndim == 2 : 顏色=255
+    return cv2.circle(image, (x,y),半徑, 顏色, 線寬 )
 
 if __name__ == '__main__' :
     pass

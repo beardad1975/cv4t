@@ -76,6 +76,7 @@ def draw_text(img, text, pos,  font_size , color):
         
         img[y:y_bottom_bound, x:x_right_bound] = ori_area_masked + font_area_masked
     
+    return img
 
 cap = cv2.VideoCapture(0)
 i = 630
@@ -84,10 +85,10 @@ while True:
     i -= 3
     j += 1
     ret, img = cap.read()
-    img = img[:200, :400]
+    #img = img[:200, :400]
     
     img = cv2.blur(img, ksize=(5,5))
-    img = imutils.auto_canny(img)
+    #img = imutils.auto_canny(img)
     draw_text(img, '你好嗎我很好', (i,j), 100, (0,0,255) )
 
     cv2.imshow('1',img)
