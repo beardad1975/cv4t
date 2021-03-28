@@ -1,14 +1,19 @@
 import cv2
 from mss import mss
+import imutils
 import numpy as np
 from . import color
+
+
 
 __all__ = [ 
             '讀取影像灰階', '讀取影像彩色', '顯示影像', '等待按鍵',
             '關閉所有影像', '儲存影像', '設置影像擷取', '擷取影像',
             '彩色轉灰階', '灰階轉彩色', '左右翻轉', '上下翻轉', '上下左右翻轉',
             '擷取螢幕灰階', '擷取螢幕', '畫方形', '畫實心方形', 'color',
-            '畫圓形', '畫實心圓形',
+            '畫圓形', '畫實心圓形', '旋轉影像', '平移影像', '縮放影像',
+            '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
+            'Canny邊緣偵測',
             ]
 
 
@@ -71,6 +76,26 @@ def 灰階轉彩色(image):
     elif image.ndim == 2:
         return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
+
+def 灰階轉黑白(image, 門檻值=128):
+    if image.ndim == 3:
+        return image
+    elif image.ndim == 2:
+        ret, result_image = cv2.threshold(image, 門檻值, 255, cv2.THRESH_BINARY)
+        return result_image if ret else  image 
+
+
+
+def 調整亮度(image, 亮度=0):
+    return imutils.adjust_brightness_contrast(
+        image, contrast=0, brightness=亮度
+        )
+
+def 調整對比(image, 對比=0):
+    return imutils.adjust_brightness_contrast(
+        image, contrast=對比, brightness=0
+        )
+
 def 左右翻轉(image):
     return cv2.flip(image, 1)
 
@@ -79,6 +104,33 @@ def 上下翻轉(image):
 
 def 上下左右翻轉(image):
     return cv2.flip(image, -1)
+
+
+def 旋轉影像(image, 角度=90):
+    return imutils.rotate(image, angle=角度) 
+
+def 平移影像(image, 水平, 垂直):
+    return imutils.translate(image, 水平, 垂直)
+
+def 縮放影像(image, 寬度=None, 高度=None):
+    if 寬度 is not None and 寬度 >=0:
+        return imutils.resize(image, width=寬度)
+    elif 高度 is not None and 高度 >=0:
+        return imutils.resize(image, height=高度)
+
+
+
+
+def 模糊(image, 核心=5):
+    return cv2.blur(image, (核心,核心))
+
+def 高斯模糊(image, 核心=5):
+    return cv2.GaussianBlur(image, (核心,核心), 0, 0)
+
+def Canny邊緣偵測(image):
+    if image.ndim != 2:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    return imutils.auto_canny(image)
 
 
 def 設置影像擷取(id=0, 解析度=None, 後端=None):
