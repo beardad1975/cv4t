@@ -102,7 +102,7 @@ while True:
     faces = face_cascade.detectMultiScale(gray,
                                           scaleFactor=1.08,
                                           minNeighbors=6,
-                                          minSize=(100, 100),
+                                          minSize=(50, 50),
                                           maxSize=(300,300),
         )
      

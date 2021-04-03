@@ -3,7 +3,9 @@ from mss import mss
 import imutils
 import numpy as np
 from . import color
-from .my_lib import draw_text, blit_alpha_img
+from .draw_lib import draw_text, blit_alpha_img
+from .dnn import 深度學習人臉模型
+
 
 
 __all__ = [ 
@@ -14,6 +16,7 @@ __all__ = [
             '畫圓形', '畫實心圓形', '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
             'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '畫透明圖',
+            '深度學習人臉模型', 
             ]
 
 
@@ -220,10 +223,12 @@ def 關閉所有影像():
     cv2.destroyAllWindows()
 
 
-def 畫方形(image, x, y, 寬, 高, 顏色=(0,0,255), 線寬=2):
+def 畫方形(image, 位置1, 位置2, 顏色=(0,0,255), 線寬=2):
     if 線寬 <= 0 : 線寬 = 2
     if image.ndim == 2 : 顏色=255
-    return cv2.rectangle(image, (x, y), (x+寬,y+高), 顏色, 線寬)
+    return cv2.rectangle(image, 位置1, 位置2, 顏色, 線寬)
+
+
 
 def 畫實心方形(image, x, y, 寬, 高, 顏色=(0,0,255), 線寬=-1):
     if image.ndim == 2 : 顏色=255
@@ -238,8 +243,8 @@ def 畫實心圓形(image, x, y, 半徑, 顏色=(0,0,255), 線寬=-1 ):
     if image.ndim == 2 : 顏色=255
     return cv2.circle(image, (x,y),半徑, 顏色, 線寬 )
 
-def 畫出文字(image, text, x, y, 大小=30, 顏色=(0,0,255)):
-    return draw_text(image, text, (x, y) , 大小, 顏色)
+def 畫出文字(image, text, 位置, 大小=30, 顏色=(0,0,255)):
+    return draw_text(image, text, 位置 , 大小, 顏色)
 
 def 畫透明圖(image, 透明圖, x, y):
     return blit_alpha_img(image, 透明圖, (x,y))
