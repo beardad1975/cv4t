@@ -16,7 +16,7 @@ __all__ = [
             '畫圓形', '畫實心圓形', '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
             'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '畫透明圖',
-            '深度學習人臉模型', 
+            '深度學習人臉模型', '畫線', '畫折線',
             ]
 
 
@@ -206,6 +206,8 @@ def 顯示影像(image, 視窗名稱=None):
     global win_name_counter    
     
     if 視窗名稱 is not None:
+        if type(視窗名稱) is not str:
+            視窗名稱 = str(視窗名稱)
         cv2.imshow(視窗名稱,image)
         cv2.waitKey(1)
     else:        
@@ -223,10 +225,16 @@ def 關閉所有影像():
     cv2.destroyAllWindows()
 
 
-def 畫方形(image, 位置1, 位置2, 顏色=(0,0,255), 線寬=2):
+def 畫線(image, 點1, 點2, 顏色=(0,0,255), 線寬=2):
     if 線寬 <= 0 : 線寬 = 2
     if image.ndim == 2 : 顏色=255
-    return cv2.rectangle(image, 位置1, 位置2, 顏色, 線寬)
+    return cv2.line(image, 點1, 點2, 顏色, 線寬)
+
+
+def 畫方形(image, 點1, 點2, 顏色=(0,0,255), 線寬=2):
+    if 線寬 <= 0 : 線寬 = 2
+    if image.ndim == 2 : 顏色=255
+    return cv2.rectangle(image, 點1, 點2, 顏色, 線寬)
 
 
 
@@ -235,13 +243,19 @@ def 畫實心方形(image, x, y, 寬, 高, 顏色=(0,0,255), 線寬=-1):
     return cv2.rectangle(image, (x, y), (x+寬,y+高), 顏色, 線寬)
 
 
-def 畫圓形(image, x, y, 半徑, 顏色=(0,0,255), 線寬=2 ):
+def 畫圓形(image, 圓心, 半徑, 顏色=(0,0,255), 線寬=2 ):
     if image.ndim == 2 : 顏色=255
-    return cv2.circle(image, (x,y),半徑, 顏色, 線寬 )
+    return cv2.circle(image, 圓心,半徑, 顏色, 線寬 )
 
 def 畫實心圓形(image, x, y, 半徑, 顏色=(0,0,255), 線寬=-1 ):
     if image.ndim == 2 : 顏色=255
     return cv2.circle(image, (x,y),半徑, 顏色, 線寬 )
+
+def 畫折線(image, 點清單, 顏色=(0,0,255), 線寬=2, 封閉=False):
+    points = np.array(點清單, np.int32)
+    return cv2.polylines(image, [points], 封閉, 顏色, 線寬)
+
+
 
 def 畫出文字(image, text, 位置, 大小=30, 顏色=(0,0,255)):
     return draw_text(image, text, 位置 , 大小, 顏色)
