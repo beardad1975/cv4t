@@ -35,3 +35,6 @@ magenta = (255, 0 ,255)
 
 def rgb(red, green , blue):
     return (blue, green, red)
+
+def bgr(blue, green , red):
+    return (blue, green, red)

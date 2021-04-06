@@ -100,12 +100,24 @@ class Face:
         return LM68List(point_list)
 
     @property   
-    def 左上點(self):
+    def 矩形左上點(self):
         return (self.x1, self.y1)
 
     @property   
-    def 右下點(self):
-        return (self.x2, self.y2)    
+    def 矩形左下點(self):
+        return (self.x1, self.y2)
+
+    @property   
+    def 矩形右上點(self):
+        return (self.x2, self.y1)  
+
+    @property   
+    def 矩形右下點(self):
+        return (self.x2, self.y2)
+
+    @property   
+    def 矩形中心點(self):
+        return (self.x2+self.x1)//2, (self.y2+self.y1)//2  
 
     @property   
     def 信心值(self):
