@@ -248,17 +248,22 @@ def 畫矩形實心(陣列, 點1, 點2, 顏色=(0,0,255), 線寬=-1):
     return cv2.rectangle(陣列, 點1, 點2, 顏色, 線寬)
 
 
-def 畫圓形(image, 圓心, 半徑, 顏色=(0,0,255), 線寬=2 ):
-    if image.ndim == 2 : 顏色=255
-    return cv2.circle(image, 圓心,半徑, 顏色, 線寬 )
+def 畫圓形(陣列, 圓心, 半徑=1, 顏色=(0,0,255), 線寬=2 ):
+    if 陣列.ndim == 2 : 顏色=255
+    if type(半徑) is not int : 半徑 = int(半徑)
+    if type(線寬) is not int : 線寬 = int(線寬)
+    return cv2.circle(陣列, 圓心,半徑, 顏色, 線寬 )
 
-def 畫圓形實心(image, x, y, 半徑, 顏色=(0,0,255), 線寬=-1 ):
-    if image.ndim == 2 : 顏色=255
-    return cv2.circle(image, (x,y),半徑, 顏色, 線寬 )
+def 畫圓形實心(陣列, 圓心, 半徑=1, 顏色=(0,0,255), 線寬=-1 ):
+    if 陣列.ndim == 2 : 顏色=255
+    if type(半徑) is not int : 半徑 = int(半徑)
+    if type(線寬) is not int : 線寬 = int(線寬)
+    return cv2.circle(陣列, 圓心, 半徑, 顏色, 線寬 )
 
-def 畫折線(image, 點清單, 顏色=(0,0,255), 線寬=2, 封閉=False):
+def 畫折線(陣列, 點清單, 顏色=(0,0,255), 線寬=2, 封閉=False):
+    if type(線寬) is not int : 線寬 = int(線寬)
     points = np.array(點清單, np.int32)
-    return cv2.polylines(image, [points], 封閉, 顏色, 線寬)
+    return cv2.polylines(陣列, [points], 封閉, 顏色, 線寬)
 
 
 
