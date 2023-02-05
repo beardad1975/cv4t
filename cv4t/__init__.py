@@ -5,7 +5,7 @@ import numpy as np
 from . import color
 from .draw_lib import draw_text, blit_alpha_img
 #from .dnn import 深度學習人臉模型
-from .recognition import 產生FaceDetection, 標示Face
+from .recognition import 設置FaceDetection, 標記全部Face, 取出開頭Face
 
 
 
@@ -17,7 +17,8 @@ __all__ = [
             '畫圓形', '畫圓形實心', '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
             'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '畫透明圖',
-            '畫直線', '畫折線', '產生FaceDetection', '標示Face',
+            '畫直線', '畫折線', '設置FaceDetection', '標記全部Face',
+            '取出開頭Face',
             ]
 
 
@@ -226,21 +227,21 @@ def 關閉所有影像():
     cv2.destroyAllWindows()
 
 
-def 畫直線(陣列, 點1, 點2, 顏色=(0,0,255), 線寬=2):
-    if 線寬 <= 0 : 線寬 = 2
-    if type(線寬) is not int : 線寬 = int(線寬)
+def 畫直線(image, pt1, pt2, color=(0,0,255), thickness=2):
+    if thickness <= 0 : thickness = 2
+    if type(thickness) is not int : thickness = int(thickness)
     
-    if 陣列.ndim == 2 : 顏色=255
+    if image.ndim == 2 : color=255
     
-    return cv2.line(陣列, 點1, 點2, 顏色, 線寬)
+    return cv2.line(image, pt1, pt2, color, thickness)
 
 
-def 畫矩形(陣列, 點1, 點2, 顏色=(0,0,255), 線寬=2):
-    if 線寬 <= 0 : 線寬 = 2
-    if type(線寬) is not int : 線寬 = int(線寬)
+def 畫矩形(image, pt1, pt2, color=(0,0,255), thickness=1):
+    if thickness <= 0 : thickness = 1
+    if type(thickness) is not int : thickness = int(thickness)
     
-    if 陣列.ndim == 2 : 顏色=255
-    return cv2.rectangle(陣列, 點1, 點2, 顏色, 線寬)
+    if image.ndim == 2 : color=255
+    return cv2.rectangle(image, pt1, pt2, color, thickness)
 
 
 
@@ -249,11 +250,11 @@ def 畫矩形實心(陣列, 點1, 點2, 顏色=(0,0,255), 線寬=-1):
     return cv2.rectangle(陣列, 點1, 點2, 顏色, 線寬)
 
 
-def 畫圓形(陣列, 圓心, 半徑=1, 顏色=(0,0,255), 線寬=2 ):
-    if 陣列.ndim == 2 : 顏色=255
-    if type(半徑) is not int : 半徑 = int(半徑)
-    if type(線寬) is not int : 線寬 = int(線寬)
-    return cv2.circle(陣列, 圓心,半徑, 顏色, 線寬 )
+def 畫圓形(image, center, radius=2, color=(0,0,255), thickness=2 ):
+    if image.ndim == 2 : color=255
+    if type(radius) is not int : radius = int(radius)
+    if type(thickness) is not int : thickness = int(thickness)
+    return cv2.circle(image, center,radius, color, thickness )
 
 def 畫圓形實心(陣列, 圓心, 半徑=1, 顏色=(0,0,255), 線寬=-1 ):
     if 陣列.ndim == 2 : 顏色=255
