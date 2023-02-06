@@ -5,7 +5,7 @@ import numpy as np
 from . import color
 from .draw_lib import draw_text, blit_alpha_img
 #from .dnn import 深度學習人臉模型
-from .recognition import 設置FaceDetection, 標記全部Face, 取出開頭Face
+from .recognition import 設置FaceDetection, 標記全部Face, 取出開頭Face, 取出Face清單
 
 
 
@@ -18,7 +18,7 @@ __all__ = [
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
             'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '畫透明圖',
             '畫直線', '畫折線', '設置FaceDetection', '標記全部Face',
-            '取出開頭Face',
+            '取出開頭Face', '取出Face清單',
             ]
 
 
@@ -269,8 +269,12 @@ def 畫折線(陣列, 點清單, 顏色=(0,0,255), 線寬=2, 封閉=False):
 
 
 
-def 畫出文字(image, text, 位置, 大小=30, 顏色=(0,0,255)):
-    return draw_text(image, text, 位置 , 大小, 顏色)
+def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
+    return draw_text(image, text, pos , size, color)
+
+# def 畫出文字(image, text, pos, font=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0,0,255),thickness=1):
+#      return cv2.putText(image, text, pos, font, fontScale, color, thickness)
+
 
 def 畫透明圖(image, 透明圖, x, y):
     return blit_alpha_img(image, 透明圖, (x,y))

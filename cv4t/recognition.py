@@ -86,6 +86,47 @@ class FaceInfo():
         y = math.floor((bbox_ymin+bbox_height) * self.img_height)
         return (x, y)
 
+    @property
+    def 右眼(self):
+        keypoints = self.mp_detection.location_data.relative_keypoints
+        x = math.floor(keypoints[0].x * self.img_width)
+        y = math.floor(keypoints[0].y * self.img_height)
+        return (x, y)
+
+    @property
+    def 左眼(self):
+        keypoints = self.mp_detection.location_data.relative_keypoints
+        x = math.floor(keypoints[1].x * self.img_width)
+        y = math.floor(keypoints[1].y * self.img_height)
+        return (x, y)
+
+    @property
+    def 鼻尖(self):
+        keypoints = self.mp_detection.location_data.relative_keypoints
+        x = math.floor(keypoints[2].x * self.img_width)
+        y = math.floor(keypoints[2].y * self.img_height)
+        return (x, y)
+
+    @property
+    def 嘴中心(self):
+        keypoints = self.mp_detection.location_data.relative_keypoints
+        x = math.floor(keypoints[3].x * self.img_width)
+        y = math.floor(keypoints[3].y * self.img_height)
+        return (x, y)
+
+    @property
+    def 右耳珠(self):
+        keypoints = self.mp_detection.location_data.relative_keypoints
+        x = math.floor(keypoints[4].x * self.img_width)
+        y = math.floor(keypoints[4].y * self.img_height)
+        return (x, y)
+
+    @property
+    def 左耳珠(self):
+        keypoints = self.mp_detection.location_data.relative_keypoints
+        x = math.floor(keypoints[5].x * self.img_width)
+        y = math.floor(keypoints[5].y * self.img_height)
+        return (x, y)
 
 
 # 最小信心值 效果試不出來
@@ -96,7 +137,7 @@ def 設置FaceDetection(模型選擇=1, 最小信心值=0.5):
 
 def 標記全部Face(img, result_wrap):
     if not result_wrap:
-        print('沒有偵測到人臉,不標示')
+        print('info: 沒有偵測到人臉,不標示')
         return
       
     for detection in result_wrap.mp_result.detections:
@@ -104,11 +145,19 @@ def 標記全部Face(img, result_wrap):
 
 def 取出開頭Face(result_wrap):
     if not result_wrap:
-        print('沒有偵測到人臉,無資料')
+        print('info: 沒有偵測到人臉,無資料')
         return
     
     detection = result_wrap.mp_result.detections[0]
     return FaceInfo(detection, result_wrap)
 
+def 取出Face清單(result_wrap):
+    if not result_wrap:
+        print('info: 沒有偵測到人臉,無資料')
+        return []
+
+    face_list = [FaceInfo(d, result_wrap) for d in result_wrap.mp_result.detections ]
+    
+    return face_list
 
 ## 

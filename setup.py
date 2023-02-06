@@ -17,7 +17,7 @@ setuptools.setup(
     python_requires=">=3.8",
     packages=['cv4t','視覺模組'],
     #package_data={'cv4t': ['models/*']},
-    install_requires = ['opencv-contrib-python>=4.7.0.68', 'Pillow>=9.0.0', 
+    install_requires = ['opencv-contrib-python>=4.7.0.68', 'pillow >= 9.1.1', 
                     'numpy>=1.24.1', 'mss~=7.0.1','imutils==0.5.4'],
         classifiers=[
             "Programming Language :: Python :: 3",
