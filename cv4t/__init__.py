@@ -5,7 +5,8 @@ import numpy as np
 from . import color
 from .draw_lib import draw_text, blit_alpha_img
 #from .dnn import 深度學習人臉模型
-from .recognition import 設置FaceDetection, 標記全部Face, 取出開頭Face, 取出Face清單
+from .recognition import 設置FaceDetection, 標記全部Face, 取出Face, 取出Face清單, \
+    設置FaceMesh, 取出FaceLandmarks
 
 
 
@@ -18,7 +19,7 @@ __all__ = [
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
             'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '畫透明圖',
             '畫直線', '畫折線', '設置FaceDetection', '標記全部Face',
-            '取出開頭Face', '取出Face清單',
+            '取出Face', '取出Face清單', '設置FaceMesh', '取出FaceLandmarks',
             ]
 
 
