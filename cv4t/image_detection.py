@@ -213,6 +213,25 @@ class FaceLandmarksInfo():
         else:
             return 0
 
+class Face3DLandmarksInfo():
+    def __init__(self, face_landmarks, result_wrap):
+        self.mp_face_landmarks = face_landmarks
+        self.img_width = result_wrap.img_width
+        self.img_height = result_wrap.img_height
+
+    def __getitem__(self, item):
+        item = self.mp_face_landmarks.landmark[item]
+
+        return (math.floor(item.x * self.img_width),
+                 math.floor(item.y * self.img_height),
+                 math.floor(item.z * self.img_width))
+
+    def __len__(self):
+        if self.mp_face_landmarks.landmark:
+            return len(self.mp_face_landmarks.landmark)
+        else:
+            return 0
+
     # @property
     # def 信心值(self):
     #     return round(self.mp_detection.score[0], 2)
@@ -226,7 +245,7 @@ def 設置FaceMesh(靜態影像模式=False, 最大偵測數=1, 精細特徵點=
         min_tracking_confidence=最小追蹤信心)
     return FaceMeshWrap(mp_detector)
 
-def 取出FaceLandmarks(result_wrap):
+def 取出Landmarks(result_wrap):
     if not result_wrap:
         print('info: 沒有偵測到人臉,無資料')
         return
@@ -234,9 +253,17 @@ def 取出FaceLandmarks(result_wrap):
     face_landmarks = result_wrap.mp_result.multi_face_landmarks[0]
     return FaceLandmarksInfo(face_landmarks, result_wrap)
 
+def 取出3DLandmarks(result_wrap):
+    if not result_wrap:
+        print('info: 沒有偵測到人臉,無資料')
+        return
+    
+    face_landmarks = result_wrap.mp_result.multi_face_landmarks[0]
+    return Face3DLandmarksInfo(face_landmarks, result_wrap)
+
 def 標記FaceMesh(img, result_wrap, type='FACE_MESH'):
     if not result_wrap:
-        print('info: 沒有偵測到人臉,不標示')
+        print('info: 沒有偵測到人臉,無法標示')
         return
 
     if type == 'FACE_MESH':
@@ -248,10 +275,14 @@ def 標記FaceMesh(img, result_wrap, type='FACE_MESH'):
         drawing_spec = mp_drawing.DrawingSpec(color=(0,255,0),thickness=-1, circle_radius=1)
         landmark_drawing_spec = drawing_spec
         connections = None
-        connection_drawing_spec = None
+        connection_drawing_spec = None    
     elif type == 'CONTOURS':
         landmark_drawing_spec = None
         connections = mp_face_mesh.FACEMESH_CONTOURS
+        connection_drawing_spec = mp_drawing_styles.get_default_face_mesh_contours_style()
+    elif type == 'FACE_OVAL':
+        landmark_drawing_spec = None
+        connections = mp_face_mesh.FACEMESH_FACE_OVAL
         connection_drawing_spec = mp_drawing_styles.get_default_face_mesh_contours_style()
     elif type == 'LIPS':
         landmark_drawing_spec = None
@@ -282,7 +313,7 @@ def 標記FaceMesh(img, result_wrap, type='FACE_MESH'):
         connections = mp_face_mesh.FACEMESH_RIGHT_IRIS
         connection_drawing_spec = mp_drawing_styles.get_default_face_mesh_iris_connections_style()
     else:
-        print(f'<<標記類型:{type}不正確>>')
+        print(f'info:標記類型:{type}不正確')
         return
     
     # draw 
@@ -293,51 +324,4 @@ def 標記FaceMesh(img, result_wrap, type='FACE_MESH'):
             connections=connections,
             landmark_drawing_spec=landmark_drawing_spec,
             connection_drawing_spec=connection_drawing_spec)
-
-
-
-def 標記FaceMesh臉型(img, result_wrap):
-    if not result_wrap:
-        print('info: 沒有偵測到人臉,不標示')
-        return
-
-    #drawing_spec = mp_drawing.DrawingSpec(color=(255,255,255),thickness=1)
-    for face_landmarks in result_wrap.mp_result.multi_face_landmarks:
-        mp_drawing.draw_landmarks(
-            image=img,
-            landmark_list=face_landmarks,
-            connections=mp_face_mesh.FACEMESH_FACE_OVAL,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style()
-            )
-
-def 標記FaceMesh左眼(img, result_wrap):
-    if not result_wrap:
-        print('info: 沒有偵測到人臉,不標示')
-        return
-
-    #drawing_spec = mp_drawing.DrawingSpec(color=(255,255,255),thickness=1)
-    for face_landmarks in result_wrap.mp_result.multi_face_landmarks:
-        mp_drawing.draw_landmarks(
-            image=img,
-            landmark_list=face_landmarks,
-            connections=mp_face_mesh.FACEMESH_LEFT_EYE,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style()
-            )
-
-def 標記FaceMesh左眉(img, result_wrap):
-    if not result_wrap:
-        print('info: 沒有偵測到人臉,不標示')
-        return
-
-    #drawing_spec = mp_drawing.DrawingSpec(color=(255,255,255),thickness=1)
-    for face_landmarks in result_wrap.mp_result.multi_face_landmarks:
-        mp_drawing.draw_landmarks(
-            image=img,
-            landmark_list=face_landmarks,
-            connections=mp_face_mesh.FACEMESH_LEFT_EYEBROW,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style()
-            )
 

@@ -5,8 +5,8 @@ import numpy as np
 from . import color
 from .draw_lib import draw_text, blit_alpha_img
 #from .dnn import 深度學習人臉模型
-from .recognition import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
-    設置FaceMesh, 取出FaceLandmarks, 標記FaceMesh  
+from .image_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
+    設置FaceMesh, 取出Landmarks, 取出3DLandmarks, 標記FaceMesh  
 
 
 
@@ -17,10 +17,10 @@ __all__ = [
             '擷取螢幕灰階', '擷取螢幕', '畫矩形', '畫矩形實心', 'color',
             '畫圓形', '畫圓形實心', '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
-            'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '畫透明圖',
+            'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '貼上去背影像',
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
-            '取出Face', '取出Face清單', '設置FaceMesh', '取出FaceLandmarks',
-            '標記FaceMesh', 
+            '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
+            '標記FaceMesh', '取出3DLandmarks',
             ]
 
 
@@ -278,8 +278,8 @@ def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
 #      return cv2.putText(image, text, pos, font, fontScale, color, thickness)
 
 
-def 畫透明圖(image, 透明圖, x, y):
-    return blit_alpha_img(image, 透明圖, (x,y))
+def 貼上去背影像(影像, 去背影像, 位置):
+    return blit_alpha_img(影像, 去背影像, 位置)
 
 if __name__ == '__main__' :
     pass
