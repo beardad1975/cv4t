@@ -117,17 +117,21 @@ def blit_alpha_img(img, alpha_img, pos):
         return
 
     
-    x = int(pos[0])
-    y = int(pos[1])
+    
 
     img_height, img_width = img.shape[0], img.shape[1]
+    alpha_img_height, alpha_img_width = alpha_img.shape[0], alpha_img.shape[1]
+
+    # calculate top-left position
+    x = int(pos[0]) - alpha_img_width//2
+    y = int(pos[1]) - alpha_img_height//2
 
     #check range
     if not  0 <= x < img_width or not  0 <= y < img_height  :
-        print('info: 去背陣列位置 超出範圍')
+        #print('info: 貼上位置 超出影像範圍')
         return
 
-    alpha_img_height, alpha_img_width = alpha_img.shape[0], alpha_img.shape[1]
+    
     
     # determine width and height
     x_right_bound = x + alpha_img_width
