@@ -3,7 +3,7 @@ from mss import mss
 import imutils
 import numpy as np
 from . import color
-from .draw_lib import draw_text, blit_alpha_img
+from .draw_lib import draw_text, blit_alpha_img, transform_png_image
 #from .dnn import 深度學習人臉模型
 from .image_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
     設置FaceMesh, 取出Landmarks, 取出3DLandmarks, 標記FaceMesh  
@@ -17,10 +17,10 @@ __all__ = [
             '擷取螢幕灰階', '擷取螢幕', '畫矩形', '畫矩形實心', 'color',
             '畫圓形', '畫圓形實心', '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
-            'Canny邊緣偵測', '畫出文字', '讀取影像PNG', '貼上去背影像',
+            'Canny邊緣偵測', '畫出文字', '讀取png影像', '貼上去背影像',
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
-            '標記FaceMesh', '取出3DLandmarks',
+            '標記FaceMesh', '取出3DLandmarks', '兩點幾何轉換', '貼上png影像',
             ]
 
 
@@ -65,7 +65,7 @@ def 讀取影像彩色(filename):
     else:
         return ret
 
-def 讀取影像PNG(filename):
+def 讀取png影像(filename):
     ret = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
     if ret is None:
         raise ImageReadError(filename)
@@ -280,6 +280,12 @@ def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
 
 def 貼上去背影像(影像, 去背影像, 位置):
     return blit_alpha_img(影像, 去背影像, 位置)
+
+def 兩點幾何轉換(來源影像, 來源點1, 來源點2, 目標影像, 目標點1, 目標點2):
+    return transform_png_image(來源影像, 來源點1, 來源點2, 目標影像, 目標點1, 目標點2)
+
+def 貼上png影像(img, alpha_img, pos=(0,0)):
+    return blit_alpha_img(img, alpha_img, pos)
 
 if __name__ == '__main__' :
     pass
