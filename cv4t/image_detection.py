@@ -44,11 +44,11 @@ class FaceInfo():
         self.img_height = result_wrap.img_height
 
     @property
-    def 信心值(self):
+    def score(self):
         return round(self.mp_detection.score[0], 2)
 
     @property
-    def 矩形左上點(self):
+    def upper_left(self):
         bbox_xmin = self.mp_detection.location_data.relative_bounding_box.xmin
         x = math.floor(bbox_xmin * self.img_width)
         bbox_ymin = self.mp_detection.location_data.relative_bounding_box.ymin
@@ -56,7 +56,7 @@ class FaceInfo():
         return (x, y)
 
     @property
-    def 矩形右下點(self):
+    def bottom_right(self):
         bbox_xmin = self.mp_detection.location_data.relative_bounding_box.xmin
         bbox_ymin = self.mp_detection.location_data.relative_bounding_box.ymin
         bbox_width = self.mp_detection.location_data.relative_bounding_box.width
@@ -67,7 +67,7 @@ class FaceInfo():
         return (x, y)
     
     @property
-    def 矩形右上點(self):
+    def upper_right(self):
         bbox_xmin = self.mp_detection.location_data.relative_bounding_box.xmin
         bbox_ymin = self.mp_detection.location_data.relative_bounding_box.ymin
         bbox_width = self.mp_detection.location_data.relative_bounding_box.width
@@ -78,7 +78,7 @@ class FaceInfo():
         return (x, y)
 
     @property
-    def 矩形左下點(self):
+    def bottom_left(self):
         bbox_xmin = self.mp_detection.location_data.relative_bounding_box.xmin
         bbox_ymin = self.mp_detection.location_data.relative_bounding_box.ymin
        
@@ -89,42 +89,42 @@ class FaceInfo():
         return (x, y)
 
     @property
-    def 右眼(self):
+    def right_eye(self):
         keypoints = self.mp_detection.location_data.relative_keypoints
         x = math.floor(keypoints[0].x * self.img_width)
         y = math.floor(keypoints[0].y * self.img_height)
         return (x, y)
 
     @property
-    def 左眼(self):
+    def left_eye(self):
         keypoints = self.mp_detection.location_data.relative_keypoints
         x = math.floor(keypoints[1].x * self.img_width)
         y = math.floor(keypoints[1].y * self.img_height)
         return (x, y)
 
     @property
-    def 鼻尖(self):
+    def nose_tip(self):
         keypoints = self.mp_detection.location_data.relative_keypoints
         x = math.floor(keypoints[2].x * self.img_width)
         y = math.floor(keypoints[2].y * self.img_height)
         return (x, y)
 
     @property
-    def 嘴中心(self):
+    def mouth_center(self):
         keypoints = self.mp_detection.location_data.relative_keypoints
         x = math.floor(keypoints[3].x * self.img_width)
         y = math.floor(keypoints[3].y * self.img_height)
         return (x, y)
 
     @property
-    def 右耳珠(self):
+    def right_ear_tragion(self):
         keypoints = self.mp_detection.location_data.relative_keypoints
         x = math.floor(keypoints[4].x * self.img_width)
         y = math.floor(keypoints[4].y * self.img_height)
         return (x, y)
 
     @property
-    def 左耳珠(self):
+    def left_ear_tragion(self):
         keypoints = self.mp_detection.location_data.relative_keypoints
         x = math.floor(keypoints[5].x * self.img_width)
         y = math.floor(keypoints[5].y * self.img_height)

@@ -17,10 +17,10 @@ __all__ = [
             '擷取螢幕灰階', '擷取螢幕', '畫矩形', '畫矩形實心', 'color',
             '畫圓形', '畫圓形實心', '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
-            'Canny邊緣偵測', '畫出文字', '讀取png影像', '貼上去背影像',
+            'Canny邊緣偵測', '畫出文字', '讀取png影像',
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
-            '標記FaceMesh', '取出3DLandmarks', '兩點幾何轉換', '貼上png影像',
+            '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png影像',
             ]
 
 
@@ -278,11 +278,11 @@ def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
 #      return cv2.putText(image, text, pos, font, fontScale, color, thickness)
 
 
-def 貼上去背影像(影像, 去背影像, 位置):
-    return blit_alpha_img(影像, 去背影像, 位置)
+# def 貼上去背影像(影像, 去背影像, 位置):
+#     return blit_alpha_img(影像, 去背影像, 位置)
 
-def 兩點幾何轉換(來源影像, 來源點1, 來源點2, 目標影像, 目標點1, 目標點2):
-    return transform_png_image(來源影像, 來源點1, 來源點2, 目標影像, 目標點1, 目標點2)
+def 兩點transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2):
+    return transform_png_image(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2)
 
 def 貼上png影像(img, alpha_img, pos=(0,0)):
     return blit_alpha_img(img, alpha_img, pos)
