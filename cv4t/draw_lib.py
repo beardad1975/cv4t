@@ -213,7 +213,7 @@ def calculateRotationAngle(a,b):
     return angle
 
 
-def transform_png_image(ori_img, ori_left_pt, ori_right_pt,
+def two_points_transform(ori_img, ori_left_pt, ori_right_pt,
                          dst_img, dst_pt1, dst_pt2):
     height, width, channels = dst_img.shape
     

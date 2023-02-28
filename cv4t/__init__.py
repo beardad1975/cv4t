@@ -3,11 +3,11 @@ from mss import mss
 import imutils
 import numpy as np
 from . import color
-from .draw_lib import draw_text, blit_alpha_img, transform_png_image
+from .draw_lib import draw_text, blit_alpha_img, two_points_transform
 #from .dnn import 深度學習人臉模型
-from .image_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
+from .face_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
     設置FaceMesh, 取出Landmarks, 取出3DLandmarks, 標記FaceMesh  
-
+from .mask_align import load_csv_annotation, mask_transform
 
 
 __all__ = [ 
@@ -21,6 +21,7 @@ __all__ = [
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
             '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png影像',
+            '讀取面具對應', '面具transform', 
             ]
 
 
@@ -207,7 +208,7 @@ def 擷取螢幕灰階(row1, row2, col1, col2):
 
 
 def 顯示影像(image, 視窗名稱=None):
-    global win_name_counter    
+    # global win_name_counter    
     
     if 視窗名稱 is not None:
         if type(視窗名稱) is not str:
@@ -215,7 +216,7 @@ def 顯示影像(image, 視窗名稱=None):
         cv2.imshow(視窗名稱,image)
         cv2.waitKey(1)
     else:        
-        cv2.imshow('1',image)
+        cv2.imshow('opencv',image)
         cv2.waitKey(1)
 
 def 等待按鍵(延遲=0):
@@ -282,10 +283,18 @@ def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
 #     return blit_alpha_img(影像, 去背影像, 位置)
 
 def 兩點transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2):
-    return transform_png_image(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2)
+    return two_points_transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2)
 
 def 貼上png影像(img, alpha_img, pos=(0,0)):
     return blit_alpha_img(img, alpha_img, pos)
+
+def 讀取面具對應(csv檔名, 面具影像):
+    return load_csv_annotation(csv檔名, 面具影像)
+
+def 面具transform(來源影像, 來源對應, 目標影像, 偵測結果):
+    return mask_transform(來源影像, 來源對應, 目標影像, 偵測結果)
+
+
 
 if __name__ == '__main__' :
     pass
