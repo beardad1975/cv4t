@@ -20,7 +20,7 @@ __all__ = [
             'Canny邊緣偵測', '畫出文字', '讀取png影像',
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
-            '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png影像',
+            '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png','置中貼上png',
             '讀取面具對應', '面具transform', 
             ]
 
@@ -285,7 +285,10 @@ def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
 def 兩點transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2):
     return two_points_transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2)
 
-def 貼上png影像(img, alpha_img, pos=(0,0)):
+def 置中貼上png(img, alpha_img, pos=(0,0)):
+    return blit_alpha_img(img, alpha_img, pos, anchor_centered=True)
+
+def 貼上png(img, alpha_img, pos=(0,0)):
     return blit_alpha_img(img, alpha_img, pos)
 
 def 讀取面具對應(csv檔名, 面具影像):

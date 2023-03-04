@@ -102,7 +102,7 @@ def draw_text(img, text, pos,  font_size , color):
     
 #     return img
 
-def blit_alpha_img(img, alpha_img, pos):
+def blit_alpha_img(img, alpha_img, pos, anchor_centered=False):
     if img is None or alpha_img is None :
         print('info: 無影像陣列')
         return
@@ -122,11 +122,14 @@ def blit_alpha_img(img, alpha_img, pos):
     img_height, img_width = img.shape[0], img.shape[1]
     alpha_img_height, alpha_img_width = alpha_img.shape[0], alpha_img.shape[1]
 
-    # calculate top-left position
-    # x = int(pos[0]) - alpha_img_width//2
-    # y = int(pos[1]) - alpha_img_height//2
-    x = int(pos[0])
-    y = int(pos[1])
+    if anchor_centered :
+        # anchor at center position
+        x = int(pos[0]) - alpha_img_width//2
+        y = int(pos[1]) - alpha_img_height//2
+    else:
+        # anchor at top-left position
+        x = int(pos[0])
+        y = int(pos[1])
 
     #check range
     if not  0 <= x < img_width or not  0 <= y < img_height  :
