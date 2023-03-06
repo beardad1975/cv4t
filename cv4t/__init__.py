@@ -12,7 +12,7 @@ from .mask_align import load_csv_annotation, mask_transform
 
 __all__ = [ 
             '讀取影像灰階', '讀取影像彩色', '顯示影像', '等待按鍵',
-            '關閉所有影像', '儲存影像', '設置影像擷取', '擷取影像',
+            '關閉全部視窗', '關閉視窗', '儲存影像', '設置影像擷取', '擷取影像',
             '彩色轉灰階', '灰階轉彩色', '左右翻轉', '上下翻轉', '上下左右翻轉',
             '擷取螢幕灰階', '擷取螢幕', '畫矩形', '畫矩形實心', 'color',
             '畫圓形', '畫圓形實心', '旋轉影像', '平移影像', '縮放影像',
@@ -20,7 +20,7 @@ __all__ = [
             'Canny邊緣偵測', '畫出文字', '讀取png影像',
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
-            '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png','置中貼上png',
+            '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png','貼上png中心點',
             '讀取面具對應', '面具transform', 
             ]
 
@@ -205,18 +205,19 @@ def 擷取螢幕灰階(row1, row2, col1, col2):
 
 
 
-
+active_windows_name_set = set()
 
 def 顯示影像(image, 視窗名稱=None):
-    # global win_name_counter    
     
     if 視窗名稱 is not None:
         if type(視窗名稱) is not str:
             視窗名稱 = str(視窗名稱)
         cv2.imshow(視窗名稱,image)
+        active_windows_name_set.add(視窗名稱)
         cv2.waitKey(1)
     else:        
-        cv2.imshow('opencv',image)
+        cv2.imshow('Image 1',image)
+        active_windows_name_set.add('Image 1')
         cv2.waitKey(1)
 
 def 等待按鍵(延遲=0):
@@ -226,8 +227,13 @@ def 等待按鍵(延遲=0):
     else:
         return chr(ret)
 
-def 關閉所有影像():
+def 關閉全部視窗():
     cv2.destroyAllWindows()
+
+def 關閉視窗(視窗名稱):
+    if 視窗名稱 in active_windows_name_set :
+        cv2.destroyWindow(視窗名稱)
+        active_windows_name_set.remove(視窗名稱)
 
 
 def 畫直線(image, pt1, pt2, color=(0,0,255), thickness=2):
@@ -285,7 +291,7 @@ def 畫出文字(image, text, pos, size=30, color=(0,0,255)):
 def 兩點transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2):
     return two_points_transform(來源影像, 來源pt1, 來源pt2, 目標影像, 目標pt1, 目標pt2)
 
-def 置中貼上png(img, alpha_img, pos=(0,0)):
+def 貼上png中心點(img, alpha_img, pos=(0,0)):
     return blit_alpha_img(img, alpha_img, pos, anchor_centered=True)
 
 def 貼上png(img, alpha_img, pos=(0,0)):

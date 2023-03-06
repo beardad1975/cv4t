@@ -113,7 +113,7 @@ def blit_alpha_img(img, alpha_img, pos, anchor_centered=False):
         return
     #check alpha
     if alpha_img.ndim != 3 or alpha_img.shape[2] != 4:
-        print('info: 含透明度陣列沒有alpha通道')
+        print('info: png影像非去背圖(無透明度資訊)')
         return
 
     
@@ -173,21 +173,21 @@ def blit_alpha_img(img, alpha_img, pos, anchor_centered=False):
 def makeRotateMatrix(angle):
     cost = np.cos(np.deg2rad(angle))
     sint = np.sin(np.deg2rad(angle))
-    mat = np.array([[cost, sint, 0],
-                   [-sint, cost, 0],
-                   [0, 0, 1]], dtype=np.float32)
+    mat = np.array([[ cost, sint, 0],
+                    [-sint, cost, 0],
+                    [    0,    0, 1]], dtype=np.float32)
     return mat
 
 def makeTranslateMatrix(dx, dy):
     mat = np.array([[1, 0, dx],
-                   [0, 1, dy],
-                   [0, 0, 1]], dtype=np.float32)
+                    [0, 1, dy],
+                    [0, 0,  1]], dtype=np.float32)
     return mat
 
 def makeScaleMatrix(scaleX, scaleY):
-    mat = np.array([[scaleX, 0, 0],
-                   [0, scaleY, 0],
-                   [0, 0, 1]], dtype=np.float32)
+    mat = np.array([[scaleX,      0, 0],
+                    [     0, scaleY, 0],
+                    [     0,      0, 1]], dtype=np.float32)
     return mat
 
 def calculateRotationAngle(a,b):
@@ -216,39 +216,41 @@ def calculateRotationAngle(a,b):
     return angle
 
 
-def two_points_transform(ori_img, ori_left_pt, ori_right_pt,
+def two_points_transform(ori_img, ori_pt1, ori_pt2,
                          dst_img, dst_pt1, dst_pt2):
-    height, width, channels = dst_img.shape
-    
-    # make sure ori pt1 is the left one
-#     if ori_left_pt[0] > ori_right_pt[0]:
-#         print('exchange ori pt1 pt2')
-#         ori_left_pt, ori_right_pt = ori_right_pt, ori_left_pt
+    height, width, _ = dst_img.shape
+    ori_height, ori_width, ori_channels = ori_img.shape
 
-    # make sure  pt1 pt2 cant be  same x 
-#     if ori_left_pt[0] == ori_right_pt[0]:
-#         raise Exception("x of left pt cant be x of right pt")
+    if ori_pt1 == ori_pt2 :
+        raise ValueError("錯誤: 來源點1、2不能相同")
+    
+    if dst_pt1 == dst_pt2:
+        raise ValueError("錯誤: 目標點1、2不能相同")
+
+    if not 0 <= ori_pt1[0] < ori_width or not 0 <= ori_pt1[1] < ori_height :
+        raise ValueError("錯誤: 來源點1超出來源影像範圍")
+
+    if not 0 <= ori_pt2[0] < ori_width or not 0 <= ori_pt2[1] < ori_height :
+        raise ValueError("錯誤: 來源點2超出來源影像範圍")
+    
+    if not 0 <= dst_pt1[0] < width or not 0 <= dst_pt1[1] < height :
+        raise ValueError("錯誤: 目標點1超出來源影像範圍")
+
+    if not 0 <= dst_pt2[0] < width or not 0 <= dst_pt2[1] < height :
+        raise ValueError("錯誤: 目標點2超出來源影像範圍")
+
+    if ori_channels != 4:
+        raise ValueError("錯誤: 來源影像非png去背圖(無透明度資訊)")
 
     # calculate vector
-    ori_x_vector = ori_right_pt[0] - ori_left_pt[0]
-    ori_y_vector = ori_right_pt[1] - ori_left_pt[1]
+    ori_x_vector = ori_pt2[0] - ori_pt1[0]
+    ori_y_vector = ori_pt2[1] - ori_pt1[1]
     dst_x_vector = dst_pt2[0] - dst_pt1[0]
     dst_y_vector = dst_pt2[1] - dst_pt1[1]
 
-    if ori_left_pt == ori_right_pt or dst_pt1 == dst_pt2:
-        raise Exception(" 來源或是目標的點1、2不能相同")
-
-
     # determine source alpha
-    if channels == 4 :
-        has_alpha = True
-        b, g, r, alpha = cv2.split(ori_img)
-        ori_img = cv2.merge((b, g, r))
-
-    else :
-        has_alpha = False
-
-
+    b, g, r, alpha = cv2.split(ori_img)
+    ori_img = cv2.merge((b, g, r))
 
     # calculate scale ratio
     ori_length = np.sqrt(abs(ori_x_vector)**2 +
@@ -256,17 +258,13 @@ def two_points_transform(ori_img, ori_left_pt, ori_right_pt,
     dst_length = np.sqrt(abs(dst_x_vector)**2 +
                            abs(dst_y_vector)**2)
     scale_ratio = dst_length / ori_length
-    #print('scale ratio: ', scale_ratio)
 
     # calculate angle
     rotation_angle = calculateRotationAngle(
                            np.array([ori_x_vector, ori_y_vector],dtype=np.float32),
                            np.array([dst_x_vector, dst_y_vector],dtype=np.float32))
-    #print('rotation angle: ', rotation_angle)
-    
 
-
-    to_ori_M = makeTranslateMatrix(-ori_left_pt[0], -ori_left_pt[1])
+    to_ori_M = makeTranslateMatrix(-ori_pt1[0], -ori_pt1[1])
     rotate_M = makeRotateMatrix(rotation_angle)
     
     scale_M = makeScaleMatrix(scale_ratio, scale_ratio)
@@ -277,11 +275,9 @@ def two_points_transform(ori_img, ori_left_pt, ori_right_pt,
     M = np.matmul(to_dst_M, M)
 
     affine_img = cv2.warpAffine(ori_img, M[:2, :], (width, height))
+    affine_alpha = cv2.warpAffine(alpha, M[:2, :], (width, height))
 
-    if has_alpha:
-        affine_alpha = cv2.warpAffine(alpha, M[:2, :], (width, height))
-        b, g, r = cv2.split(affine_img)
-        affine_img = cv2.merge((b, g, r, affine_alpha))
-
+    b, g, r = cv2.split(affine_img)
+    affine_img = cv2.merge((b, g, r, affine_alpha))
 
     return affine_img
