@@ -233,11 +233,11 @@ def two_points_transform(ori_img, ori_pt1, ori_pt2,
     if not 0 <= ori_pt2[0] < ori_width or not 0 <= ori_pt2[1] < ori_height :
         raise ValueError("錯誤: 來源點2超出來源影像範圍")
     
-    if not 0 <= dst_pt1[0] < width or not 0 <= dst_pt1[1] < height :
-        raise ValueError("錯誤: 目標點1超出來源影像範圍")
+    # if not 0 <= dst_pt1[0] < width or not 0 <= dst_pt1[1] < height :
+    #     raise ValueError("錯誤: 目標點1超出來源影像範圍")
 
-    if not 0 <= dst_pt2[0] < width or not 0 <= dst_pt2[1] < height :
-        raise ValueError("錯誤: 目標點2超出來源影像範圍")
+    # if not 0 <= dst_pt2[0] < width or not 0 <= dst_pt2[1] < height :
+    #     raise ValueError("錯誤: 目標點2超出來源影像範圍")
 
     if ori_channels != 4:
         raise ValueError("錯誤: 來源影像非png去背圖(無透明度資訊)")

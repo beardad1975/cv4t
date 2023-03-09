@@ -14,7 +14,7 @@ def load_annotate_landmarks(annotation_file):
         for i, row in enumerate(csv_reader):
             # skip head or empty line if it's there
             try:
-                x, y = int(row[1]), int(row[2])
+                x, y = int(row[2]), int(row[3])
                 points[row[0]] = (x, y)
             except ValueError:
                 continue

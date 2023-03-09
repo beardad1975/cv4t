@@ -21,7 +21,7 @@ __all__ = [
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
             '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png','貼上png中心點',
-            '讀取面具對應', '面具transform', 
+            '讀取面具臉型', '面具transform', 
             ]
 
 
@@ -297,11 +297,11 @@ def 貼上png中心點(img, alpha_img, pos=(0,0)):
 def 貼上png(img, alpha_img, pos=(0,0)):
     return blit_alpha_img(img, alpha_img, pos)
 
-def 讀取面具對應(csv檔名, 面具影像):
+def 讀取面具臉型(csv檔名, 面具影像):
     return load_csv_annotation(csv檔名, 面具影像)
 
-def 面具transform(來源影像, 來源對應, 目標影像, 偵測結果):
-    return mask_transform(來源影像, 來源對應, 目標影像, 偵測結果)
+def 面具transform(來源影像, 臉型對應, 目標影像, 偵測結果):
+    return mask_transform(來源影像, 臉型對應, 目標影像, 偵測結果)
 
 
 
