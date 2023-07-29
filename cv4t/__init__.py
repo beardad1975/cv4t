@@ -1,5 +1,6 @@
 import cv2
 from mss import mss
+from PIL import Image
 import imutils
 import numpy as np
 from . import color
@@ -7,6 +8,7 @@ from .draw_lib import draw_text, blit_alpha_img, two_points_transform
 #from .dnn import 深度學習人臉模型
 from .face_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
     設置FaceMesh, 取出Landmarks, 取出3DLandmarks, 標記FaceMesh  
+from .pose_landmark import 設置PoseLandmark, 標記Pose, 取出PoseLandmarks
 from .mask_align import load_csv_annotation, mask_transform
 
 
@@ -21,7 +23,8 @@ __all__ = [
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
             '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png','貼上png中心點',
-            '讀取面具臉型', '面具transform', 
+            '讀取面具臉型', '面具transform', '設置PoseLandmark', '標記Pose',
+            '取出PoseLandmarks',
             ]
 
 
@@ -53,31 +56,61 @@ class CameraReadError(Exception):
 ### wrapper functions
 
 def 讀取影像灰階(filename):
-    ret = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    if ret is None:
-        raise ImageReadError(filename)
+    pil_img = Image.open(filename)
+    temp_img = np.asarray(pil_img)
+    if temp_img.ndim == 4 :
+        img = cv2.cvtColor(temp_img, cv2.COLOR_RGBA2GRAY)
     else:
-        return ret
+        img = cv2.cvtColor(temp_img, cv2.COLOR_RGB2GRAY)
+
+    return img
+    # ret = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    # if ret is None:
+    #     raise ImageReadError(filename)
+    # else:
+    #     return ret
 
 def 讀取影像彩色(filename):
-    ret = cv2.imread(filename, cv2.IMREAD_COLOR)
-    if ret is None:
-        raise ImageReadError(filename)
+    pil_img = Image.open(filename)
+    temp_img = np.asarray(pil_img)
+    if temp_img.ndim == 4 :
+        img = cv2.cvtColor(temp_img, cv2.COLOR_RGBA2BGR)
     else:
-        return ret
+        img = cv2.cvtColor(temp_img, cv2.COLOR_RGB2BGR)
+
+    return img
+    # ret = cv2.imread(filename, cv2.IMREAD_COLOR)
+    # if ret is None:
+    #     raise ImageReadError(filename)
+    # else:
+    #     return ret
 
 def 讀取png影像(filename):
-    ret = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
-    if ret is None:
-        raise ImageReadError(filename)
+    file_type = filename[-3:]
+    if  file_type != 'png' and file_type != 'PNG' :
+        raise ImageReadError('檔案類型必須為png')
+    pil_img = Image.open(filename)
+    temp_img = np.asarray(pil_img)
+    if temp_img.ndim == 4 :
+        img = cv2.cvtColor(temp_img, cv2.COLOR_RGBA2BGRA)
     else:
-        return ret    
+        img = cv2.cvtColor(temp_img, cv2.COLOR_RGB2BGRA)
+
+    return img
+    # ret = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+    # if ret is None:
+    #     raise ImageReadError(filename)
+    # else:
+    #     return ret    
 
 
-def 儲存影像(filename, image):
-    ret = cv2.imwrite(filename, image)
-    if ret is False:
-        ImageWriteError(filename)
+def 儲存影像(filename, img):
+    pil_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    pil_img.save(filename)
+
+    # ret = cv2.imwrite(filename, image)
+    # if ret is False:
+    #     ImageWriteError(filename)
 
 def 彩色轉灰階(image):
     if image.ndim == 2:
