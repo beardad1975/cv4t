@@ -7,8 +7,8 @@ from . import color
 from .draw_lib import draw_text, blit_alpha_img, two_points_transform
 #from .dnn import 深度學習人臉模型
 from .face_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
-    設置FaceMesh, 取出Landmarks, 取出3DLandmarks, 標記FaceMesh  
-from .pose_landmark import 設置PoseLandmark, 標記Pose, 取出PoseLandmarks
+    設置FaceMesh, 取出Landmarks, 標記FaceMesh  
+from .pose_landmark import 設置Pose, 標記Pose, 取出PoseLandmarks
 from .mask_align import load_csv_annotation, mask_transform
 
 
@@ -17,14 +17,14 @@ __all__ = [
             '關閉全部視窗', '關閉視窗', '儲存影像', '設置影像擷取', '擷取影像',
             '彩色轉灰階', '灰階轉彩色', '左右翻轉', '上下翻轉', '上下左右翻轉',
             '擷取螢幕灰階', '擷取螢幕', '畫矩形', '畫矩形實心', 'color',
-            '畫圓形', '畫圓形實心', '旋轉影像', '平移影像', '縮放影像',
+            '畫圓形',  '旋轉影像', '平移影像', '縮放影像',
             '調整亮度', '調整對比', '模糊', '高斯模糊', '灰階轉黑白',
             'Canny邊緣偵測', '畫出文字', '讀取png影像',
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
-            '標記FaceMesh', '取出3DLandmarks', '兩點transform', '貼上png','貼上png中心點',
-            '讀取面具臉型', '面具transform', '設置PoseLandmark', '標記Pose',
-            '取出PoseLandmarks',
+            '標記FaceMesh', '兩點transform', '貼上png','貼上png中心點',
+            '讀取面具臉型', '面具transform', '設置Pose', '標記Pose',
+            '取出PoseLandmarks'
             ]
 
 
@@ -279,7 +279,7 @@ def 畫直線(image, pt1, pt2, color=(0,0,255), thickness=2):
 
 
 def 畫矩形(image, pt1, pt2, color=(0,0,255), thickness=1):
-    if thickness <= 0 : thickness = 1
+    #if thickness <= 0 : thickness = 1
     if type(thickness) is not int : thickness = int(thickness)
     
     if image.ndim == 2 : color=255
@@ -298,11 +298,11 @@ def 畫圓形(image, center, radius=2, color=(0,0,255), thickness=2 ):
     if type(thickness) is not int : thickness = int(thickness)
     return cv2.circle(image, center,radius, color, thickness )
 
-def 畫圓形實心(陣列, 圓心, 半徑=1, 顏色=(0,0,255), 線寬=-1 ):
-    if 陣列.ndim == 2 : 顏色=255
-    if type(半徑) is not int : 半徑 = int(半徑)
-    if type(線寬) is not int : 線寬 = int(線寬)
-    return cv2.circle(陣列, 圓心, 半徑, 顏色, 線寬 )
+# def 畫圓形實心(陣列, 圓心, 半徑=1, 顏色=(0,0,255), 線寬=-1 ):
+#     if 陣列.ndim == 2 : 顏色=255
+#     if type(半徑) is not int : 半徑 = int(半徑)
+#     if type(線寬) is not int : 線寬 = int(線寬)
+#     return cv2.circle(陣列, 圓心, 半徑, 顏色, 線寬 )
 
 def 畫折線(陣列, 點清單, 顏色=(0,0,255), 線寬=2, 封閉=False):
     if type(線寬) is not int : 線寬 = int(線寬)

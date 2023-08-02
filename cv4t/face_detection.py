@@ -207,21 +207,20 @@ class FaceLandmarksInfo():
         return (math.floor(item.x * self.img_width),
                  math.floor(item.y * self.img_height))
 
-    def __len__(self):
-        if self.mp_face_landmarks.landmark:
-            return len(self.mp_face_landmarks.landmark)
-        else:
-            return 0
+    def x(self, 索引):
+        tmp_x = self.mp_face_landmarks.landmark[索引].x
+        return math.floor(tmp_x * self.img_width)
+    
+    def y(self, 索引):
+        tmp_y = self.mp_face_landmarks.landmark[索引].y
+        return math.floor(tmp_y * self.img_height)
+    
+    def z(self, 索引):
+        tmp_z = self.mp_face_landmarks.landmark[索引].z
+        return math.floor(tmp_z * self.img_width)
 
-class Face3DLandmarksInfo():
-    def __init__(self, face_landmarks, result_wrap):
-        self.mp_face_landmarks = face_landmarks
-        self.img_width = result_wrap.img_width
-        self.img_height = result_wrap.img_height
-
-    def __getitem__(self, item):
-        item = self.mp_face_landmarks.landmark[item]
-
+    def 座標3D(self, 索引):
+        item = self.mp_face_landmarks.landmark[索引]
         return (math.floor(item.x * self.img_width),
                  math.floor(item.y * self.img_height),
                  math.floor(item.z * self.img_width))
@@ -231,6 +230,25 @@ class Face3DLandmarksInfo():
             return len(self.mp_face_landmarks.landmark)
         else:
             return 0
+
+# class Face3DLandmarksInfo():
+#     def __init__(self, face_landmarks, result_wrap):
+#         self.mp_face_landmarks = face_landmarks
+#         self.img_width = result_wrap.img_width
+#         self.img_height = result_wrap.img_height
+
+#     def __getitem__(self, item):
+#         item = self.mp_face_landmarks.landmark[item]
+
+#         return (math.floor(item.x * self.img_width),
+#                  math.floor(item.y * self.img_height),
+#                  math.floor(item.z * self.img_width))
+
+#     def __len__(self):
+#         if self.mp_face_landmarks.landmark:
+#             return len(self.mp_face_landmarks.landmark)
+#         else:
+#             return 0
 
     # @property
     # def 信心值(self):
@@ -253,13 +271,13 @@ def 取出Landmarks(result_wrap):
     face_landmarks = result_wrap.mp_result.multi_face_landmarks[0]
     return FaceLandmarksInfo(face_landmarks, result_wrap)
 
-def 取出3DLandmarks(result_wrap):
-    if not result_wrap:
-        print('info: 沒有偵測到人臉,無資料')
-        return
+# def 取出3DLandmarks(result_wrap):
+#     if not result_wrap:
+#         print('info: 沒有偵測到人臉,無資料')
+#         return
     
-    face_landmarks = result_wrap.mp_result.multi_face_landmarks[0]
-    return Face3DLandmarksInfo(face_landmarks, result_wrap)
+#     face_landmarks = result_wrap.mp_result.multi_face_landmarks[0]
+#     return Face3DLandmarksInfo(face_landmarks, result_wrap)
 
 def 標記FaceMesh(img, result_wrap, type='FACE_MESH'):
     if not result_wrap:
