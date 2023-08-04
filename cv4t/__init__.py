@@ -8,7 +8,8 @@ from .draw_lib import draw_text, blit_alpha_img, two_points_transform
 #from .dnn import 深度學習人臉模型
 from .face_detection import 設置FaceDetection, 標記Face, 取出Face, 取出Face清單, \
     設置FaceMesh, 取出Landmarks, 標記FaceMesh  
-from .pose_landmark import 設置Pose, 標記Pose, 取出PoseLandmarks
+from .hand_detection import 設置HandDetection, 標記Hand
+from .pose_detection import 設置PoseDetection, 標記Pose, 取出PoseLandmarks
 from .mask_align import load_csv_annotation, mask_transform
 
 
@@ -23,8 +24,8 @@ __all__ = [
             '畫直線', '畫折線', '設置FaceDetection', '標記Face',
             '取出Face', '取出Face清單', '設置FaceMesh', '取出Landmarks',
             '標記FaceMesh', '兩點transform', '貼上png','貼上png中心點',
-            '讀取面具臉型', '面具transform', '設置Pose', '標記Pose',
-            '取出PoseLandmarks'
+            '讀取面具臉型', '面具transform', '設置PoseDetection', '標記Pose',
+            '取出PoseLandmarks', '設置HandDetection', '標記Hand',
             ]
 
 

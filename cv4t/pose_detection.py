@@ -104,7 +104,7 @@ class PoseLandmarksInfo():
 #             return 0
 
 
-def 設置Pose(最小偵測信心=0.5):
+def 設置PoseDetection(最小偵測信心=0.5):
     mp_detector =  mp_pose.Pose(min_detection_confidence=最小偵測信心)
     return PoseDetectorWrap(mp_detector)
 
