@@ -259,11 +259,10 @@ def 取出Hand(result_wrap):
 
 def 取出Hand清單(result_wrap):
     if not result_wrap:
-        print('info: 沒有偵測到手,無資料')
+        #print('info: 沒有偵測到手,無資料')
         return []
 
     result = global_callback.last_result
-
     hand_list = []
     for idx, _ in enumerate(result.hand_landmarks):
         hand_list.append(HandInfo(idx, result_wrap.img_width, result_wrap.img_height))
