@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name="cv4t",
-    version="0.0.7",
+    version="0.0.8",
     author="Wen-Hung, Chang 張文宏",
     author_email="beardad1975@nmes.tyc.edu.tw",
     description="Computer Vision wrapper library for Teenagers",
@@ -16,7 +16,7 @@ setuptools.setup(
     platforms=["Windows"],
     python_requires=">=3.8",
     packages=['cv4t','視覺模組'],
-    #package_data={'cv4t': ['models/*']},
+    package_data={'cv4t': ['model_needed/*']},
     install_requires = ['opencv-contrib-python>=4.7.0.68', 'pillow >= 9.1.1', 
                     'numpy>=1.24.1', 'mss~=7.0.1','imutils==0.5.4'],
         classifiers=[
