@@ -179,41 +179,70 @@ class HandInfo():
 
     def 特徵點(self, 索引):
         result = global_callback.last_result
-        x = math.floor(result.hand_landmarks[self.idx][索引].x * self.img_width)
-        y = math.floor(result.hand_landmarks[self.idx][索引].y * self.img_height)
+        try:
+            x = math.floor(result.hand_landmarks[self.idx][索引].x * self.img_width)
+            y = math.floor(result.hand_landmarks[self.idx][索引].y * self.img_height)
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,xy傳回0')
+            x = 0
+            y = 0
         return (x, y)
     
     def x(self, 索引):
         result = global_callback.last_result
-        x = math.floor(result.hand_landmarks[self.idx][索引].x * self.img_width)
+        try:
+            x = math.floor(result.hand_landmarks[self.idx][索引].x * self.img_width)
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,x傳回0')
+            x = 0
         return x
     
     def y(self, 索引):
         result = global_callback.last_result
-        y = math.floor(result.hand_landmarks[self.idx][索引].y * self.img_height)
+        try:
+            y = math.floor(result.hand_landmarks[self.idx][索引].y * self.img_height)
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,y傳回0')
+            y = 0    
         return y
     
     def z(self, 索引):
         result = global_callback.last_result
-        z = math.floor(result.hand_landmarks[self.idx][索引].z * self.img_width)
+        try:
+            z = math.floor(result.hand_landmarks[self.idx][索引].z * self.img_width)
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,z傳回0')
+            z = 0 
         return z
 
     def 座標3D(self, 索引):
         result = global_callback.last_result
-        x = math.floor(result.hand_landmarks[self.idx][索引].x * self.img_width)
-        y = math.floor(result.hand_landmarks[self.idx][索引].y * self.img_height)
-        z = math.floor(result.hand_landmarks[self.idx][索引].z * self.img_width)
+        try:
+            x = math.floor(result.hand_landmarks[self.idx][索引].x * self.img_width)
+            y = math.floor(result.hand_landmarks[self.idx][索引].y * self.img_height)
+            z = math.floor(result.hand_landmarks[self.idx][索引].z * self.img_width)
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,xyz傳回0')
+            x, y, z = 0, 0, 0 
         return (x, y, z)
 
     @property
     def handedness(self):
         result = global_callback.last_result
-        return result.handedness[self.idx][0].category_name
+        try:
+            return result.handedness[self.idx][0].category_name
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,傳回空字串')
+            return ""
 
     @property
     def gesture(self):
         result = global_callback.last_result
-        return result.gestures[self.idx][0].category_name    
+        try:
+            return result.gestures[self.idx][0].category_name 
+        except (AttributeError, IndexError):
+            print('info: 取不到特徵資料,傳回None')
+            return "None"   
 
 
 ### main function

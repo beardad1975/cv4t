@@ -222,10 +222,16 @@ def two_points_transform(ori_img, ori_pt1, ori_pt2,
     ori_height, ori_width, ori_channels = ori_img.shape
 
     if ori_pt1 == ori_pt2 :
-        raise ValueError("錯誤: 來源點1、2不能相同")
+        #raise ValueError("錯誤: 來源點1、2不能相同")
+        # make tiny delta
+        ori_pt2 = (ori_pt1[0]+1, ori_pt1[1]+1)
+
     
     if dst_pt1 == dst_pt2:
-        raise ValueError("錯誤: 目標點1、2不能相同")
+        #raise ValueError("錯誤: 目標點1、2不能相同")
+        # make tiny delta
+        dst_pt2 = (dst_pt1[0]+1, dst_pt1[1]+1)
+
 
     if not 0 <= ori_pt1[0] < ori_width or not 0 <= ori_pt1[1] < ori_height :
         raise ValueError("錯誤: 來源點1超出來源影像範圍")
