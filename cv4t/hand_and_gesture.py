@@ -276,18 +276,18 @@ def 標記Hand(img, result_wrap):
 
 
 def 取出Hand(result_wrap):
-    if not result_wrap:
-        print('info: 沒有偵測到手,無資料')
-        return
+    # if result_wrap is None:
+    #     print('error: 沒有結果資料')
+    #     return
     
     result = global_callback.last_result
-    if len(result.hand_landmarks) == 0 :
-        raise IndentationError
+    # if len(result.hand_landmarks) == 0 :
+    #     raise IndentationError
 
     return HandInfo(0, result_wrap.img_width, result_wrap.img_height)
 
 def 取出Hand清單(result_wrap):
-    if not result_wrap:
+    if result_wrap is None:
         #print('info: 沒有偵測到手,無資料')
         return []
 
